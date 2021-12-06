@@ -1,6 +1,6 @@
 - name: create /etc/init.d/webobjects file
   copy:
-    src: ../files/webobjects_service.sh
+    src: webobjects_service.sh
     dest: /etc/init.d/webobjects
     owner: root
     group: root
@@ -8,7 +8,7 @@
 
 - name: configure WebObjects apps on SiteConfig.xml
   template:
-    src: ../templates/SiteConfig.xml.j2
+    src: SiteConfig.xml.j2
     dest: /opt/webobjects/config/SiteConfig.xml
     owner: appserver
     group: appserveradm

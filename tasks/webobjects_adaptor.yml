@@ -17,6 +17,7 @@
   - name: clone wonder repository in a temporary folder
     git:
       repo: 'https://github.com/wocommunity/wonder.git'
+      version: 'master'
       dest: /tmp/wonder
       force: yes
 
@@ -37,7 +38,7 @@
       chdir: /tmp/wonder/Utilities/Adaptors
 
   - name: install WebObjects adaptor as an Apache module
-    shell: apxs -i -a -n WebObjects mod_WebObjects.la chdir=/tmp/wonder/Utilities/Adaptors/Apache2.4
+    command: apxs -i -a -n WebObjects mod_WebObjects.la chdir=/tmp/wonder/Utilities/Adaptors/Apache2.4
 
   - name: remove wonder directory
     file:
@@ -47,7 +48,7 @@
 
 - name: copy WebObjects Apache configuration to /etc/httpd/conf.d
   copy:
-    src: "../files/webobjects_apache.conf"
+    src: "webobjects_apache.conf"
     dest: /etc/httpd/conf.d/webobjects.conf
     owner: root
     group: root

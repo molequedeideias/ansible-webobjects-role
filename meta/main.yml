@@ -1,4 +1,6 @@
 galaxy_info:
+  role_name: ansible_webojects_role
+  namespace: moleque_de_ideias
   author: Henrique Prange
   description: Ansible role to deploy WebObjects applications and install wotaskd and JavaMonitor services.
   company: WOCommunity
