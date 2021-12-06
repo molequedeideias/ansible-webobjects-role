@@ -1,0 +1,70 @@
+<SiteConfig type="NSDictionary">
+	<hostArray type="NSArray">
+		<element type="NSDictionary">
+			<type type="NSString">{{ wo_host.type }}</type>
+			<name type="NSString">{{ wo_host.name }}</name>
+		</element>
+	</hostArray>
+	<applicationArray type="NSArray">
+{% for item in wo_apps %}
+	{% set wo_app = default_wo_app|combine(item) %}
+		<element type="NSDictionary">
+			<cachingEnabled type="NSString">{{ wo_app.caching_enabled }}</cachingEnabled>
+			<adaptor type="NSString">{{ wo_app.adaptor }}</adaptor>
+			<additionalArgs type="NSString">{{ wo_app.additional_args }}</additionalArgs>
+			<name type="NSString">{{ wo_app.name }}</name>
+			<unixPath type="NSString">{{ wo_app.unix_path }}</unixPath>
+			<adaptorThreadsMin type="NSNumber">{{ wo_app.adaptor_threads_min }}</adaptorThreadsMin>
+			<notificationEmailEnabled type="NSString">{{ wo_app.notification_email_enabled }}</notificationEmailEnabled>
+			<macPath type="NSString">{{ wo_app.mac_path }}</macPath>
+			<lifebeatInterval type="NSNumber">{{ wo_app.lifebeat_interval }}</lifebeatInterval>
+			<minimumActiveSessionsCount type="NSNumber">{{ wo_app.minimum_active_session_count }}</minimumActiveSessionsCount>
+			<adaptorThreadsMax type="NSNumber">{{ wo_app.adaptor_threads_max }}</adaptorThreadsMax>
+			<startingPort type="NSNumber">{{ wo_app.starting_port|default(2000 + loop.index) }}</startingPort>
+			<adaptorThreads type="NSNumber">{{ wo_app.adaptor_threads }}</adaptorThreads>
+			<projectSearchPath type="NSString">{{ wo_app.project_search_path }}</projectSearchPath>
+			<autoRecover type="NSString">{{ wo_app.auto_recover }}</autoRecover>
+			<autoOpenInBrowser type="NSString">{{ wo_app.auto_open_in_browser }}</autoOpenInBrowser>
+			<listenQueueSize type="NSNumber">{{ wo_app.listen_queue_size }}</listenQueueSize>
+			<unixOutputPath type="NSString">{{ wo_app.unix_output_path }}</unixOutputPath>
+			<sessionTimeOut type="NSNumber">{{ wo_app.session_timeout }}</sessionTimeOut>
+			<debuggingEnabled type="NSString">{{ wo_app.debugging_enabled }}</debuggingEnabled>
+			<phasedStartup type="NSString">{{ wo_app.phased_startup }}</phasedStartup>
+			<macOutputPath type="NSString">{{ wo_app.mac_output_path }}</macOutputPath>
+			<timeForStartup type="NSNumber">{{ wo_app.time_for_startup }}</timeForStartup>
+		</element>
+{% endfor %}
+	</applicationArray>
+	<instanceArray type="NSArray">
+{% for item in wo_instances %}
+	{% set wo_instance = default_wo_instance|combine(item) %}
+		<element type="NSDictionary">
+			<port type="NSNumber">{{ wo_instance.port|default(2000 + loop.index) }}</port>
+			<cachingEnabled type="NSString">{{ wo_instance.caching_enabled }}</cachingEnabled>
+			<additionalArgs type="NSString">{{ wo_instance.additional_args }}</additionalArgs>
+			<path type="NSString">{{ wo_instance.path }}</path>
+			<outputPath type="NSString">{{ wo_instance.output_path }}</outputPath>
+			<autoOpenInBrowser type="NSString">{{ wo_instance.auto_open_in_browser }}</autoOpenInBrowser>
+			<schedulingDailyStartTime type="NSNumber">{{ wo_instance.scheduling_daily_start_time }}</schedulingDailyStartTime>
+			<debuggingEnabled type="NSString">{{ wo_instance.debugging_enabled }}</debuggingEnabled>
+			<schedulingEnabled type="NSString">{{ wo_instance.scheduling_enabled }}</schedulingEnabled>
+			<schedulingStartDay type="NSNumber">{{ wo_instance.scheduling_start_day }}</schedulingStartDay>
+			<hostName type="NSString">{{ wo_instance.host_name }}</hostName>
+			<schedulingInterval type="NSNumber">{{ wo_instance.scheduling_interval }}</schedulingInterval>
+			<autoRecover type="NSString">{{ wo_instance.auto_recover }}</autoRecover>
+			<lifebeatInterval type="NSNumber">{{ wo_instance.lifebeat_interval }}</lifebeatInterval>
+			<applicationName type="NSString">{{ wo_instance.application_name }}</applicationName>
+			<gracefulScheduling type="NSString">{{ wo_instance.graceful_scheduling }}</gracefulScheduling>
+			<schedulingWeeklyStartTime type="NSNumber">{{ wo_instance.scheduling_weekly_start_time }}</schedulingWeeklyStartTime>
+			<id type="NSNumber">{{ wo_instance.id|default(loop.index) }}</id>
+			<schedulingType type="NSString">{{ wo_instance.scheduling_type }}</schedulingType>
+			<minimumActiveSessionsCount type="NSNumber">{{ wo_instance.minimum_active_sessions_count }}</minimumActiveSessionsCount>
+			<schedulingHourlyStartTime type="NSNumber">{{ wo_instance.scheduling_hourly_start_time }}</schedulingHourlyStartTime>
+		</element>
+{% endfor %}
+	</instanceArray>
+	<site type="NSDictionary">
+		<viewRefreshEnabled type="NSString">{{ wo_site.view_refresh_enabled }}</viewRefreshEnabled>
+		<viewRefreshRate type="NSNumber">{{ wo_site.view_refresh_rate }}</viewRefreshRate>
+	</site>
+</SiteConfig>

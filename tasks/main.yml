@@ -1,0 +1,4 @@
+---
+- import_tasks: webobjects_adaptor.yml
+- import_tasks: webobjects_deploy.yml
+- import_tasks: webobjects_service.yml

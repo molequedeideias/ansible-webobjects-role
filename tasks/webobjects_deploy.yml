@@ -1,0 +1,87 @@
+---
+- name: add appserveradm group
+  group:
+    name: appserveradm
+    state: present
+
+- name: include appserver user
+  user:
+    name: appserver
+    state: present
+    comment: Creating user appserver with ansible
+    group: appserveradm
+    createhome: no
+
+- name: create WebObjects related directories
+  file:
+    path: "{{ item }}"
+    owner: appserver
+    group: appserveradm
+    state: directory
+    mode: 0755
+  with_items:
+    - /opt/webobjects/tools
+    - /opt/webobjects/apps
+    - /opt/webobjects/config
+    - /var/log/webobjects
+    - /var/log/webobjects/gc
+    - /var/log/webobjects/heapdumps
+    - /var/log/java
+
+- name: check if wotaskd is already installed
+  stat: path=/opt/webobjects/tools/wotaskd.woa
+  register: wotaskd_dir
+
+- block:
+  - name: download the latest version of wotaskd
+    unarchive:
+      src: https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=wotaskd&v=LATEST&p=woapplication.tar.gz
+      dest: /opt/webobjects/tools
+      remote_src: True
+      owner: appserver
+      group: appserveradm
+      mode: 0755
+
+  - name: rename wotaskd bundle
+    shell: mv wotaskd-*.woa wotaskd.woa chdir=/opt/webobjects/tools
+  when: wotaskd_dir.stat.exists == False
+
+- name: configure the wotaskd log file when starting apps 
+  lineinfile:
+    path: /opt/webobjects/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh
+    regexp: '^LOG='
+    line: LOG=/var/log/webobjects/SpawnOfWotaskd.log
+
+- name: enable the wotaskd log when starting apps 
+  file:
+    path: /tmp/logWebObjects
+    owner: appserver
+    group: appserveradm
+    mode: 0644
+    state: touch
+
+- name: check if JavaMonitor is already installed
+  stat: path=/opt/webobjects/tools/JavaMonitor.woa
+  register: javamonitor_dir
+
+- block:
+  - name: download latest version of JavaMonitor
+    unarchive:
+      src: https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=JavaMonitor&v=LATEST&p=woapplication.tar.gz
+      dest: /opt/webobjects/tools
+      remote_src: True
+      owner: appserver
+      group: appserveradm
+      mode: 0755
+
+  - name: rename JavaMonitor bundle
+    shell: mv JavaMonitor-*.woa JavaMonitor.woa chdir=/opt/webobjects/tools
+  when: javamonitor_dir.stat.exists == False
+
+- name: create directory for WebObjects web resources
+  file:
+    path: /var/www/html/WebObjects
+    owner: appserver
+    group: appserveradm
+    state: directory
+    mode: 0755

@@ -1,0 +1,61 @@
+---
+- name: check if WebObjects adaptor is already installed
+  stat: path=/usr/lib64/httpd/modules/mod_WebObjects.so
+  register: wo_adaptor_mod
+
+- block:
+  - name: install required tools (Git, Make, GCC, httpd-devel)
+    yum: 
+      name:
+        - git
+        - make
+        - gcc
+        - httpd
+        - httpd-devel
+      state: present
+
+  - name: clone wonder repository in a temporary folder
+    git:
+      repo: 'https://github.com/wocommunity/wonder.git'
+      dest: /tmp/wonder
+      force: yes
+
+  - name: configure Make to produce Linux compatible binaries of WO Adaptor
+    lineinfile:
+      path: /tmp/wonder/Utilities/Adaptors/make.config
+      regexp: '^ADAPTOR_OS\s='
+      line: 'ADAPTOR_OS = LINUX'
+
+  - name: configure Make to produce Apache 2.4 compatible binaries of WO Adaptor
+    lineinfile:
+      path: /tmp/wonder/Utilities/Adaptors/make.config
+      regexp: '^ADAPTORS\s=\sCGI\sApache2\.2'
+      line: 'ADAPTORS = Apache2.4'
+
+  - name: build WebObjects adaptor for Apache 2.4
+    make:
+      chdir: /tmp/wonder/Utilities/Adaptors
+
+  - name: install WebObjects adaptor as an Apache module
+    shell: apxs -i -a -n WebObjects mod_WebObjects.la chdir=/tmp/wonder/Utilities/Adaptors/Apache2.4
+
+  - name: remove wonder directory
+    file:
+      path: /tmp/wonder
+      state: absent
+  when: wo_adaptor_mod.stat.exists == False
+
+- name: copy WebObjects Apache configuration to /etc/httpd/conf.d
+  copy:
+    src: "../files/webobjects_apache.conf"
+    dest: /etc/httpd/conf.d/webobjects.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart httpd
+
+- name: remove ScriptAlias cgi-bin
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ScriptAlias /cgi-bin/'
+    state: absent

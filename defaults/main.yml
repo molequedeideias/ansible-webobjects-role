@@ -1,0 +1,55 @@
+---
+wo_apps: []
+
+wo_instances: []
+
+wo_host:
+  name: "{{ inventory_hostname }}"
+  type: UNIX
+
+wo_site:
+  view_refresh_enabled: "YES"
+  view_refresh_rate: 60
+
+default_wo_app:
+  adaptor_threads_max: 16
+  adaptor_threads_min: 2
+  adaptor_threads: 16
+  adaptor: WODefaultAdaptor
+  additional_args: ""
+  auto_open_in_browser: "NO"
+  auto_recover: "NO"
+  caching_enabled: "YES"
+  debugging_enabled: "NO"
+  lifebeat_interval: 30
+  listen_queue_size: 8
+  mac_output_path: /Library/WebObjects/Logs
+  mac_path: /Library/WebObjects/Applications
+  minimum_active_session_count: 0
+  notification_email_enabled: "NO"
+  phased_startup: "YES"
+  project_search_path: "()"
+  session_timeout: 3600
+  time_for_startup: 30
+  unix_output_path: /var/log/webobjects
+  unix_path: /opt/webobjects/apps
+
+default_wo_instance:
+  additional_args: ""
+  auto_open_in_browser: "NO"
+  auto_recover: "NO"
+  caching_enabled: "YES"
+  debugging_enabled: "NO"
+  graceful_scheduling: "YES"
+  host_name: "{{ inventory_hostname }}"
+  lifebeat_interval: 30
+  minimum_active_sessions_count: 0
+  output_path: /var/log/webobjects
+  path: /opt/webobjects/apps
+  scheduling_daily_start_time: 3
+  scheduling_enabled: "NO"
+  scheduling_hourly_start_time: 3
+  scheduling_interval: 12
+  scheduling_start_day: 1
+  scheduling_type: "DAILY"
+  scheduling_weekly_start_time: 3
