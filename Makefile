@@ -2,7 +2,7 @@
 
 PLAYBOOK='playbook.yml'
 
-all: clean yamllint syntax-check ansible-lint deploy
+all: clean yamllint ansible-lint deploy
 
 test: clean yamllint ansible-lint
 
@@ -14,3 +14,6 @@ yamllint:
 
 ansible-lint:
 	ansible-lint .
+
+molecule-test:
+	molecule test
