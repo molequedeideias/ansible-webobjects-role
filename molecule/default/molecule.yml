@@ -1,0 +1,29 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+  provision: no
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: ansible-role-webobjects
+    box: oraclelinux/8
+    box_url: https://oracle.github.io/vagrant-projects/boxes/oraclelinux/8.json
+    memory: 1024
+    cpus: 2
+    interfaces:
+      - network_name: forwarded_port
+        guest: 80
+        host: 8080
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: vagrant
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
