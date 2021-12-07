@@ -12,6 +12,8 @@
         - gcc
         - httpd
         - httpd-devel
+        # Oracle Linux 8 dependency
+        - redhat-rpm-config
       state: present
 
   - name: clone wonder repository in a temporary folder
