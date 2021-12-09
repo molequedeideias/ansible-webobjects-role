@@ -1,87 +1,88 @@
 ---
-- name: add appserveradm group
+- name: add  {{ wo_name }} {{ wo_app_user_group }} group
   group:
-    name: appserveradm
+    name: "{{ wo_app_user_group }}"
     state: present
 
-- name: include appserver user
+- name: include {{ wo_name }} {{ wo_app_user }} user
   user:
-    name: appserver
+    name: "{{ wo_app_user }}"
     state: present
-    comment: Creating user appserver with ansible
-    group: appserveradm
+    comment: "{{ wo_name }} app administrator user"
+    group: "{{ wo_app_user_group }}"
     createhome: no
 
-- name: create WebObjects related directories
+- name: create {{ wo_name }} related directories
   file:
     path: "{{ item }}"
-    owner: appserver
-    group: appserveradm
+    owner: "{{ wo_app_user }}"
+    group: "{{ wo_app_user_group }}"
     state: directory
     mode: 0755
   with_items:
-    - /opt/webobjects/tools
-    - /opt/webobjects/apps
-    - /opt/webobjects/config
-    - /var/log/webobjects
-    - /var/log/webobjects/gc
-    - /var/log/webobjects/heapdumps
+    - "{{ wo_basedir }}/tools"
+    - "{{ wo_basedir }}/apps"
+    - "{{ wo_basedir }}/config"
+    - "{{ wo_logdir }}"
+    - "{{ wo_logdir }}/gc"
+    - "{{ wo_logdir }}/heapdumps"
     - /var/log/java
 
 - name: check if wotaskd is already installed
-  stat: path=/opt/webobjects/tools/wotaskd.woa
+  stat:
+    path: "{{ wo_basedir }}/tools/wotaskd.woa"
   register: wotaskd_dir
 
 - block:
   - name: download the latest version of wotaskd
     unarchive:
-      src: https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=wotaskd&v=LATEST&p=woapplication.tar.gz
-      dest: /opt/webobjects/tools
+      src: "{{ wotaskd_url }}"
+      dest: "{{ wo_basedir }}/tools"
       remote_src: True
-      owner: appserver
-      group: appserveradm
+      owner: "{{ wo_app_user }}"
+      group: "{{ wo_app_user_group }}"
       mode: 0755
 
   - name: rename wotaskd bundle
-    shell: mv wotaskd-*.woa wotaskd.woa chdir=/opt/webobjects/tools
+    shell: mv wotaskd-*.woa wotaskd.woa chdir={{ wo_basedir }}/tools
   when: wotaskd_dir.stat.exists == False
 
 - name: configure the wotaskd log file when starting apps 
   lineinfile:
-    path: /opt/webobjects/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh
+    path: "{{ wo_basedir }}/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh"
     regexp: '^LOG='
-    line: LOG=/var/log/webobjects/SpawnOfWotaskd.log
+    line: LOG="{{ wo_logdir }}/SpawnOfWotaskd.log"
 
 - name: enable the wotaskd log when starting apps 
   file:
     path: /tmp/logWebObjects
-    owner: appserver
-    group: appserveradm
+    owner: "{{ wo_app_user }}"
+    group: "{{ wo_app_user_group }}"
     mode: 0644
     state: touch
 
 - name: check if JavaMonitor is already installed
-  stat: path=/opt/webobjects/tools/JavaMonitor.woa
+  stat: path={{ wo_basedir }}/tools/JavaMonitor.woa
   register: javamonitor_dir
 
 - block:
   - name: download latest version of JavaMonitor
     unarchive:
       src: https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=JavaMonitor&v=LATEST&p=woapplication.tar.gz
-      dest: /opt/webobjects/tools
+      dest: "{{ wo_basedir }}/tools"
       remote_src: True
-      owner: appserver
-      group: appserveradm
+      owner: "{{ wo_app_user }}"
+      group: "{{ wo_app_user_group }}"
       mode: 0755
 
   - name: rename JavaMonitor bundle
-    shell: mv JavaMonitor-*.woa JavaMonitor.woa chdir=/opt/webobjects/tools
+    shell: mv JavaMonitor-*.woa JavaMonitor.woa chdir="{{ wo_basedir }}/tools"
   when: javamonitor_dir.stat.exists == False
 
-- name: create directory for WebObjects web resources
+- name: create directory for {{ wo_name }} web resources
   file:
-    path: /var/www/html/WebObjects
-    owner: appserver
-    group: appserveradm
+    path: "{{ wo_webdir }}"
+    owner: "{{ wo_app_user }}"
+    group: "{{ wo_app_user_group }}"
     state: directory
     mode: 0755

@@ -1,4 +1,14 @@
 ---
+wo_app_user: 'moleque'
+wo_app_user_group: 'moleque'
+
+wo_name: 'wo'
+wo_basedir: '/opt/wo'
+wo_logdir: '/var/log/wo'
+wo_webdir: '/var/www/html/{{ wo_name }}'
+
+wotaskd_url: 'https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=wotaskd&v=LATEST&p=woapplication.tar.gz'
+
 wo_apps: []
 
 wo_instances: []
