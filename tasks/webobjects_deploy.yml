@@ -1,22 +1,9 @@
 ---
-- name: add  {{ wo_name }} {{ wo_app_user_group }} group
-  group:
-    name: "{{ wo_app_user_group }}"
-    state: present
-
-- name: include {{ wo_name }} {{ wo_app_user }} user
-  user:
-    name: "{{ wo_app_user }}"
-    state: present
-    comment: "{{ wo_name }} app administrator user"
-    group: "{{ wo_app_user_group }}"
-    createhome: no
-
 - name: create {{ wo_name }} related directories
   file:
     path: "{{ item }}"
-    owner: "{{ wo_app_user }}"
-    group: "{{ wo_app_user_group }}"
+    owner: "{{ wo_user }}"
+    group: "{{ wo_user_group }}"
     state: directory
     mode: 0755
   with_items:
@@ -39,8 +26,8 @@
       src: "{{ wotaskd_url }}"
       dest: "{{ wo_basedir }}/tools"
       remote_src: True
-      owner: "{{ wo_app_user }}"
-      group: "{{ wo_app_user_group }}"
+      owner: "{{ wo_user }}"
+      group: "{{ wo_user_group }}"
       mode: 0755
 
   - name: rename wotaskd bundle
@@ -56,8 +43,8 @@
 - name: enable the wotaskd log when starting apps 
   file:
     path: /tmp/logWebObjects
-    owner: "{{ wo_app_user }}"
-    group: "{{ wo_app_user_group }}"
+    owner: "{{ wo_user }}"
+    group: "{{ wo_user_group }}"
     mode: 0644
     state: touch
 
@@ -68,11 +55,11 @@
 - block:
   - name: download latest version of JavaMonitor
     unarchive:
-      src: https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=JavaMonitor&v=LATEST&p=woapplication.tar.gz
+      src: "https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=JavaMonitor&v=LATEST&p=woapplication.tar.gz"
       dest: "{{ wo_basedir }}/tools"
       remote_src: True
-      owner: "{{ wo_app_user }}"
-      group: "{{ wo_app_user_group }}"
+      owner: "{{ wo_user }}"
+      group: "{{ wo_user_group }}"
       mode: 0755
 
   - name: rename JavaMonitor bundle
@@ -82,7 +69,7 @@
 - name: create directory for {{ wo_name }} web resources
   file:
     path: "{{ wo_webdir }}"
-    owner: "{{ wo_app_user }}"
-    group: "{{ wo_app_user_group }}"
+    owner: "{{ wo_user }}"
+    group: "{{ wo_user_group }}"
     state: directory
     mode: 0755
