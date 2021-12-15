@@ -1,0 +1,31 @@
+# prepare file for ansible-webojects-role
+# Here should go tasks that will prepare the system, environment, etc, before the installation continues
+---
+- name: 'Install required tools (Git, Make, GCC, httpd-devel)'
+  yum:
+    name:
+      - 'vim'
+      - 'git'
+      - 'make'
+      - 'gcc'
+      - 'httpd'
+      - 'httpd-devel'
+      # Oracle Linux 8 dependency
+      - 'redhat-rpm-config'
+      - 'java-11-openjdk'
+    state: present
+
+- name: 'Create {{ wo_user_group }} group in the system'
+  group:
+    name: '{{ wo_user_group }}'
+    state: present
+
+- name: 'Create {{ wo_user }} user in the system'
+  user:
+    name: "{{ wo_user }}"
+    state: present
+    comment: "{{ wo_name }} applications administrator user"
+    group: "{{ wo_user_group }}"
+    createhome: yes
+    home: '{{ wo_basedir }}'
+

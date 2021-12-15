@@ -1,4 +1,8 @@
+# Main file for ansible-webobjects-role
 ---
+- import_tasks: prepare.yml
+  become: yes
+  become_user: root
 - import_tasks: webobjects_adaptor.yml
 - import_tasks: webobjects_deploy.yml
 - import_tasks: webobjects_service.yml

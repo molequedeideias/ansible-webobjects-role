@@ -1,21 +1,9 @@
 ---
-- name: check if WebObjects adaptor is already installed
+- name: check if {{ wo_name }} adaptor is already installed
   stat: path=/usr/lib64/httpd/modules/mod_WebObjects.so
   register: wo_adaptor_mod
 
 - block:
-  - name: install required tools (Git, Make, GCC, httpd-devel)
-    yum: 
-      name:
-        - git
-        - make
-        - gcc
-        - httpd
-        - httpd-devel
-        # Oracle Linux 8 dependency
-        - redhat-rpm-config
-      state: present
-
   - name: clone wonder repository in a temporary folder
     git:
       repo: 'https://github.com/wocommunity/wonder.git'
@@ -35,11 +23,11 @@
       regexp: '^ADAPTORS\s=\sCGI\sApache2\.2'
       line: 'ADAPTORS = Apache2.4'
 
-  - name: build WebObjects adaptor for Apache 2.4
+  - name: build {{ wo_name }} adaptor for Apache 2.4
     make:
       chdir: /tmp/wonder/Utilities/Adaptors
 
-  - name: install WebObjects adaptor as an Apache module
+  - name: install {{ wo_name }} adaptor as an Apache module
     command: apxs -i -a -n WebObjects mod_WebObjects.la chdir=/tmp/wonder/Utilities/Adaptors/Apache2.4
 
   - name: remove wonder directory
@@ -48,7 +36,7 @@
       state: absent
   when: wo_adaptor_mod.stat.exists == False
 
-- name: copy WebObjects Apache configuration to /etc/httpd/conf.d
+- name: copy {{ wo_name }} Apache configuration to /etc/httpd/conf.d
   copy:
     src: "webobjects_apache.conf"
     dest: /etc/httpd/conf.d/webobjects.conf
