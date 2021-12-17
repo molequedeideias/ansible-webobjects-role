@@ -1,10 +1,13 @@
 ---
-- name: restart httpd
+- name: 'HANDLER | Restart httpd'
   service:
     name: httpd
     state: restarted
+  listen: restart_httpd
 
-- name: restart webobjects
+- name: 'HANDLER | Restart {{ wo_name }}'
   service:
-    name: webobjects
-    state: restarted
+    name: '{{ wo_name }}'
+    state: started
+    enabled: yes
+  listen: start_wo_unit

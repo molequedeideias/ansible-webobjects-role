@@ -1,0 +1,27 @@
+# configure file for ansible-webobjects-role
+# All configurations of WebObjects and System scripts should go here!
+---
+- name: 'CONFIG | Configure WebObjects apps on SiteConfig.xml'
+  template:
+    src: SiteConfig.xml.j2
+    dest: "{{ wo_basedir }}/config/SiteConfig.xml"
+    owner: "{{ wo_user }}"
+    group: "{{ wo_user_group }}"
+    mode: 0644
+
+- name: 'CONFIG | Configure WebObjects apps on WOConfig.xml'
+  template:
+    src: WOConfig.xml.j2
+    dest: "{{ wo_basedir }}/config/WOConfig.xml"
+    owner: "{{ wo_user }}"
+    group: "{{ wo_user_group }}"
+    mode: 0644
+
+- name: 'CONFIG | Create SystemD unit'
+  template:
+    src: wo.service.j2
+    dest: "/etc/systemd/system/{{ wo_name }}.service"
+    owner: root
+    group: root
+    mode: 0755
+  notify: start_wo_unit
