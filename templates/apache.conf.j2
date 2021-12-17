@@ -8,12 +8,12 @@ LoadModule WebObjects_module		modules/mod_WebObjects.so
 
 # Path to the Document Root of your Webserver,
 # it should contain a directory named WebObjects
-WebObjectsDocumentRoot /var/www/html
+WebObjectsDocumentRoot {{ web_root }}
 
 # You can change the 'cgi-bin' part of WebObjectsAlias to whatever you
 # prefer (such as Apps), but the 'WebObjects' part is required.
-WebObjectsAlias /cgi-bin/WebObjects
-<Location /cgi-bin/WebObjects/>
+WebObjectsAlias {{ wo_scripts_alias }}
+<Location {{ wo_scripts_alias }}/>
     Require all granted
 </Location>
 
@@ -30,7 +30,7 @@ WebObjectsAlias /cgi-bin/WebObjects
 # For multiple hosts:
 # WebObjectsConfig http://<name-of-a-host>:<port-on-a-host>,http://<name-of-another-host>:<port-on-a-host> <interval>
 # For localhost:
-WebObjectsConfig http://localhost:1085 10
+# WebObjectsConfig http://localhost:1085 10
 
 # Multicast Configuration
 # The apache module gets its configuration from all wotaskds
@@ -39,7 +39,7 @@ WebObjectsConfig http://localhost:1085 10
 
 # File Configuration
 # The apache module gets its configuration from one file
-# WebObjectsConfig file://<path-to-a-xml-config-file> 10
+WebObjectsConfig file://{{ wo_basedir }}/config/ 10
 
 
 # To enable public access to the WOAdaptorInfo page, uncomment the following line

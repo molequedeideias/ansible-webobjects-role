@@ -1,13 +1,15 @@
 <SiteConfig type="NSDictionary">
 	<hostArray type="NSArray">
+{% for wo_host in wo_hosts %}
 		<element type="NSDictionary">
 			<type type="NSString">{{ wo_host.type }}</type>
 			<name type="NSString">{{ wo_host.name }}</name>
 		</element>
+{% endfor %}
 	</hostArray>
 	<applicationArray type="NSArray">
-{% for item in wo_apps %}
-	{% set wo_app = default_wo_app|combine(item) %}
+{% for item in wo_apps -%}
+	{%- set wo_app = default_wo_app|combine(item) %}
 		<element type="NSDictionary">
 			<cachingEnabled type="NSString">{{ wo_app.caching_enabled }}</cachingEnabled>
 			<adaptor type="NSString">{{ wo_app.adaptor }}</adaptor>
@@ -36,8 +38,15 @@
 {% endfor %}
 	</applicationArray>
 	<instanceArray type="NSArray">
-{% for item in wo_instances %}
-	{% set wo_instance = default_wo_instance|combine(item) %}
+{% set wo_instances = [] -%}
+{% for wo_host in wo_hosts -%}
+  {%- for wo_instance in wo_host.instances -%}
+    {%- set _ = wo_instance.update({'host_name': wo_host.name}) -%}
+    {%- set _ = wo_instances.append(wo_instance) -%}
+  {%- endfor -%}
+{% endfor -%}
+{% for item in wo_instances -%}
+	{%- set wo_instance = default_wo_instance|combine(item) %}
 		<element type="NSDictionary">
 			<port type="NSNumber">{{ wo_instance.port|default(2000 + loop.index) }}</port>
 			<cachingEnabled type="NSString">{{ wo_instance.caching_enabled }}</cachingEnabled>
@@ -64,7 +73,7 @@
 {% endfor %}
 	</instanceArray>
 	<site type="NSDictionary">
-		<viewRefreshEnabled type="NSString">{{ wo_site.view_refresh_enabled }}</viewRefreshEnabled>
-		<viewRefreshRate type="NSNumber">{{ wo_site.view_refresh_rate }}</viewRefreshRate>
+		<viewRefreshEnabled type="NSString">{{ wo_site_view_refresh_enabled }}</viewRefreshEnabled>
+		<viewRefreshRate type="NSNumber">{{ wo_site_view_refresh_rate }}</viewRefreshRate>
 	</site>
 </SiteConfig>

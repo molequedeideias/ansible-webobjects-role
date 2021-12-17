@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII"?>
+<adaptor>
+{%- set wo_instances = [] -%}
+{%- for wo_host in wo_hosts -%}
+  {%- for wo_instance in wo_host.instances -%}
+    {%- set _ = wo_instance.update({'host_name': wo_host.name}) -%}
+    {%- set _ = wo_instances.append(wo_instance) -%}
+  {%- endfor -%}
+{%- endfor -%}
+{% for wo_app in wo_apps %}
+  <application name="{{ wo_app.name }}">
+  {%- for wo_instance in wo_instances|selectattr("application_name", "equalto", wo_app.name) %}
+    <instance id="{{ wo_instance.id|default(loop.index) }}" port="{{ wo_instance.port|default(2000 + loop.index) }}" host="{{ wo_instance.host_name }}"/>
+  {%- endfor %}
+  </application>
+{% endfor -%}
+</adaptor>
