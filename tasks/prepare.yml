@@ -27,5 +27,5 @@
     comment: "{{ wo_name }} applications administrator user"
     group: "{{ wo_user_group }}"
     createhome: yes
-    home: '{{ wo_basedir }}'
+    home: '{{ wo_user_homedir }}'
 

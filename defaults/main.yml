@@ -1,6 +1,7 @@
 ---
 wo_user: 'wo'
 wo_user_group: 'wo'
+wo_user_homedir: '/home/{{ wo_user }}'
 wo_name: 'wo'
 wo_basedir_prefix: '/opt'
 wo_basedir: '{{ wo_basedir_prefix }}/{{ wo_name }}'
