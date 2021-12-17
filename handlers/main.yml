@@ -5,9 +5,14 @@
     state: restarted
   listen: restart_httpd
 
+- name: 'HANDLER | Reload SystemD units'
+  systemd:
+    daemon_reload: yes
+  listen: start_wo_unit
+
 - name: 'HANDLER | Restart {{ wo_name }}'
   service:
     name: '{{ wo_name }}'
-    state: started
+    state: restarted
     enabled: yes
   listen: start_wo_unit
