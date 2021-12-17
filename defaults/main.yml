@@ -1,65 +1,72 @@
 ---
-wo_app_user: 'moleque'
-wo_app_user_group: 'moleque'
-
+wo_user: 'wo'
+wo_user_group: 'wo'
 wo_name: 'wo'
-wo_basedir: '/opt/wo'
-wo_logdir: '/var/log/wo'
+wo_basedir_prefix: '/opt'
+wo_basedir: '{{ wo_basedir_prefix }}/{{ wo_name }}'
+wo_logdir: '/var/log/{{ wo_name }}'
 wo_webdir: '/var/www/html/{{ wo_name }}'
+wo_unit_env: 'NEXT_ROOT={{ wo_basedir_prefix }}'
+wo_taskd_jvm_opts: '-Xmx512m'
+wo_taskd_port: '1085'
+wo_javamonitor_jvm_opts: '-Xmx512m'
+wo_javamonitor_port: '56789'
+wo_scripts_alias: '/cgi-bin/WebObjects'
+wo_site_view_refresh_enabled: 'YES'
+wo_site_view_refresh_rate: 60
+java_version: 'java-11-openjdk'
+web_root: '/var/www/html'
+web_config_dir: '/etc/httpd/conf'
+web_custom_config_dir: '/etc/httpd/conf.d'
 
-wotaskd_url: 'https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=wotaskd&v=LATEST&p=woapplication.tar.gz'
+wotaskd_download_url: >
+  https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=wotaskd&v=LATEST&p=woapplication.tar.gz
+java_monitor_download_url: >
+  https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=JavaMonitor&v=LATEST&p=woapplication.tar.gz
 
 wo_apps: []
 
-wo_instances: []
-
-wo_host:
-  name: "{{ inventory_hostname }}"
-  type: UNIX
-
-wo_site:
-  view_refresh_enabled: "YES"
-  view_refresh_rate: 60
+wo_hosts: []
 
 default_wo_app:
   adaptor_threads_max: 16
   adaptor_threads_min: 2
   adaptor_threads: 16
-  adaptor: WODefaultAdaptor
-  additional_args: ""
-  auto_open_in_browser: "NO"
-  auto_recover: "NO"
-  caching_enabled: "YES"
-  debugging_enabled: "NO"
+  adaptor: 'WODefaultAdaptor'
+  additional_args: ''
+  auto_open_in_browser: 'NO'
+  auto_recover: 'NO'
+  caching_enabled: 'YES'
+  debugging_enabled: 'NO'
   lifebeat_interval: 30
   listen_queue_size: 8
-  mac_output_path: /Library/WebObjects/Logs
-  mac_path: /Library/WebObjects/Applications
+  mac_output_path: '/Library/WebObjects/Logs'
+  mac_path: '/Library/WebObjects/Applications'
   minimum_active_session_count: 0
-  notification_email_enabled: "NO"
-  phased_startup: "YES"
-  project_search_path: "()"
+  notification_email_enabled: 'NO'
+  phased_startup: 'YES'
+  project_search_path: '()'
   session_timeout: 3600
   time_for_startup: 30
-  unix_output_path: /var/log/webobjects
-  unix_path: /opt/webobjects/apps
+  unix_output_path: '/var/log/webobjects'
+  unix_path: '/opt/webobjects/apps'
 
 default_wo_instance:
-  additional_args: ""
-  auto_open_in_browser: "NO"
-  auto_recover: "NO"
-  caching_enabled: "YES"
-  debugging_enabled: "NO"
-  graceful_scheduling: "YES"
-  host_name: "{{ inventory_hostname }}"
+  additional_args: ''
+  auto_open_in_browser: 'NO'
+  auto_recover: 'NO'
+  caching_enabled: 'YES'
+  debugging_enabled: 'NO'
+  graceful_scheduling: 'YES'
+  host_name: '{{ inventory_hostname }}'
   lifebeat_interval: 30
   minimum_active_sessions_count: 0
-  output_path: /var/log/webobjects
-  path: /opt/webobjects/apps
+  output_path: '/var/log/webobjects'
+  path: '/opt/webobjects/apps'
   scheduling_daily_start_time: 3
-  scheduling_enabled: "NO"
+  scheduling_enabled: 'NO'
   scheduling_hourly_start_time: 3
   scheduling_interval: 12
   scheduling_start_day: 1
-  scheduling_type: "DAILY"
+  scheduling_type: 'DAILY'
   scheduling_weekly_start_time: 3

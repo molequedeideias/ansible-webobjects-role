@@ -3,22 +3,18 @@
 - import_tasks: prepare.yml
   become: yes
   become_user: root
-- import_tasks: webobjects_adaptor.yml
+- import_tasks: adaptor.yml
   tags:
     - wo
     - apache
     - adaptor
-- import_tasks: webobjects_deploy.yml
+- import_tasks: deploy.yml
   tags:
     - wo
     - deploy
     - wotaskd
     - java_monitor
-- import_tasks: webobjects_service.yml
+- import_tasks: configure.yml
   tags:
     - wo
     - service
-- import_tasks: proxy.yml
-  tags:
-    - app
-    - proxy

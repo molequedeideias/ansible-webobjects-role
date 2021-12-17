@@ -1,0 +1,81 @@
+---
+- name: 'DEPLOY | Create {{ wo_name }} related directories'
+  file:
+    path: '{{ item }}'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    state: directory
+    mode: 0755
+  with_items:
+    - '{{ wo_basedir }}/tools'
+    - '{{ wo_basedir }}/apps'
+    - '{{ wo_basedir }}/config'
+    - '{{ wo_logdir }}'
+    - '{{ wo_logdir }}/gc'
+    - '{{ wo_logdir }}/heapdumps'
+    - '/var/log/java'
+
+- name: 'DEPLOY | Check if wotaskd is already installed'
+  stat:
+    path: '{{ wo_basedir }}/tools/wotaskd.woa'
+  register: wotaskd_dir
+
+- block:
+  - name: 'DEPLOY | Download the latest version of wotaskd'
+    unarchive:
+      src: '{{ wotaskd_download_url }}'
+      dest: '{{ wo_basedir }}/tools'
+      remote_src: true
+      owner: '{{ wo_user }}'
+      group: '{{ wo_user_group }}'
+      mode: 0755
+
+  - name: 'DEPLOY | Rename wotaskd bundle'
+    shell: mv wotaskd-*.woa wotaskd.woa
+    args:
+      chdir: '{{ wo_basedir }}/tools'
+  when: wotaskd_dir.stat.exists == False
+
+- name: 'DEPLOY | Configure the wotaskd log file when starting apps'
+  lineinfile:
+    path: '{{ wo_basedir }}/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh'
+    regexp: '^LOG='
+    line: LOG='{{ wo_logdir }}/SpawnOfWotaskd.log'
+
+- name: 'DEPLOY | Enable the wotaskd log when starting apps'
+  file:
+    path: '/tmp/logWebObjects'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    mode: 0644
+    state: touch
+
+- name: 'DEPLOY | Check if JavaMonitor is already installed'
+  stat:
+    path: '{{ wo_basedir }}/tools/JavaMonitor.woa'
+  register: javamonitor_dir
+
+- block:
+  - name: 'DEPLOY | Download latest version of JavaMonitor'
+    unarchive:
+      src: '{{ java_monitor_download_url }}'
+      dest: '{{ wo_basedir }}/tools'
+      remote_src: true
+      owner: '{{ wo_user }}'
+      group: '{{ wo_user_group }}'
+      mode: 0755
+
+  - name: 'DEPLOY | Rename JavaMonitor bundle'
+    shell: mv JavaMonitor-*.woa JavaMonitor.woa
+    args:
+      chdir: '{{ wo_basedir }}/tools'
+  when: javamonitor_dir.stat.exists == False
+
+- name: 'DEPLOY | Create directory for {{ wo_name }} web resources'
+  file:
+    path: '{{ wo_webdir }}'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    state: directory
+    mode: 0755
+
