@@ -20,6 +20,9 @@ platforms:
       - network_name: forwarded_port
         guest: 80
         host: 8080
+      - network_name: forwarded_port
+        guest: 56789
+        host: 56789
     config_options:
       ssh.keep_alive: yes
       ssh.remote_user: vagrant
