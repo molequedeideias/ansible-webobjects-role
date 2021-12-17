@@ -3,16 +3,24 @@
   service:
     name: httpd
     state: restarted
-  listen: restart_httpd
+  listen:
+    - restart_httpd
+    - restart_apache
 
 - name: 'HANDLER | Reload SystemD units'
   systemd:
     daemon_reload: yes
-  listen: start_wo_unit
+  listen:
+    - start_wo_unit
+    - start_wo
+    - restart_wo
 
 - name: 'HANDLER | Restart {{ wo_name }}'
   service:
     name: '{{ wo_name }}'
     state: restarted
     enabled: yes
-  listen: start_wo_unit
+  listen:
+    - start_wo_unit
+    - start_wo
+    - restart_wo
