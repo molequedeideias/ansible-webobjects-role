@@ -4,5 +4,21 @@
   become: yes
   become_user: root
 - import_tasks: webobjects_adaptor.yml
+  tags:
+    - wo
+    - apache
+    - adaptor
 - import_tasks: webobjects_deploy.yml
+  tags:
+    - wo
+    - deploy
+    - wotaskd
+    - java_monitor
 - import_tasks: webobjects_service.yml
+  tags:
+    - wo
+    - service
+- import_tasks: proxy.yml
+  tags:
+    - app
+    - proxy
