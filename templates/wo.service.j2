@@ -1,5 +1,5 @@
 [Unit]
-Description = WO
+Description = WebObjects service unit
 After = network-online.target
 Wants = network-online.target
 
@@ -12,12 +12,8 @@ WorkingDirectory = {{ wo_basedir }}
 ExecStart = {{ wo_basedir }}/tools/wotaskd.woa/wotaskd {{ wo_taskd_jvm_opts }} \
                                                         -WOPort {{ wo_taskd_port }} \
                                                         -WODeploymentConfigurationDirectory {{ wo_basedir }}/config \
-                                                        > {{ wo_logdir }}/wotaskd.log 2>&1 & ; \
-                                                        {{ wo_basedir }}/tools/JavaMonitor.woa/JavaMonitor {{ wo_javamonitor_jvm_opts }} \
-                                                        -WOPort {{ wo_javamonitor_port }} \
-                                                        -WODeploymentConfigurationDirectory {{ wo_basedir }}/config \
-                                                        > {{ wo_logdir }}/JavaMonitor.log 2>&1 &
-ExecStop = kill `ps aux | awk '/wotaskd/ && !/awk/ {print $2}'` ; kill `ps aux | awk '/JavaMonitor/ && !/awk/ {print $2}'`
+                                                        > {{ wo_logdir }}/wotaskd.log 2>&1 &
+ExecStop = kill `ps aux | awk '/wotaskd/ && !/awk/ {print $2}'`
 StandardOutput = {{ wo_logdir }}/{{ wo_name }}.log
 StandardError = {{ wo_logdir }}/{{ wo_name }}.err
 

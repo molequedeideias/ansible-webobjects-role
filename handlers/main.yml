@@ -24,3 +24,25 @@
     - start_wo_unit
     - start_wo
     - restart_wo
+
+- name: 'HANDLER | Start JavaMonitor'
+  service:
+    name: 'javamonitor'
+    state: restarted
+    enabled: yes
+  when: wo_start_javamonitor == True
+  listen:
+    - start_javamonitor_service
+    - javamonitor_service
+    - restart_javamonitor
+
+- name: 'HANDLER | Disable JavaMonitor'
+  service:
+    name: 'javamonitor'
+    state: stopped
+    enabled: false
+  when: wo_start_javamonitor == False
+  listen:
+    - start_javamonitor_service
+    - javamonitor_service
+    - restart_javamonitor

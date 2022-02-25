@@ -1,0 +1,35 @@
+---
+- name: 'WOTASKD | Check if wotaskd is already installed'
+  stat:
+    path: '{{ wo_basedir }}/tools/wotaskd.woa'
+  register: wotaskd_dir
+
+- block:
+  - name: 'WOTASKD | Download the latest version of wotaskd'
+    unarchive:
+      src: '{{ wotaskd_download_url }}'
+      dest: '{{ wo_basedir }}/tools'
+      remote_src: true
+      owner: '{{ wo_user }}'
+      group: '{{ wo_user_group }}'
+      mode: 0755
+
+  - name: 'WOTASKD | Rename wotaskd bundle'
+    shell: mv wotaskd-*.woa wotaskd.woa
+    args:
+      chdir: '{{ wo_basedir }}/tools'
+  when: wotaskd_dir.stat.exists == False
+
+- name: 'WOTASKD | Configure the wotaskd log file when starting apps'
+  lineinfile:
+    path: '{{ wo_basedir }}/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh'
+    regexp: '^LOG='
+    line: LOG='{{ wo_logdir }}/SpawnOfWotaskd.log'
+
+- name: 'WOTASKD | Enable the wotaskd log when starting apps'
+  file:
+    path: '/tmp/logWebObjects'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    mode: 0644
+    state: touch

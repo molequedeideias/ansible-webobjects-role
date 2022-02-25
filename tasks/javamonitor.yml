@@ -1,0 +1,21 @@
+---
+- name: 'JavaMonitor | Check if JavaMonitor is already installed'
+  stat:
+    path: '{{ wo_basedir }}/tools/JavaMonitor.woa'
+  register: javamonitor_dir
+
+- block:
+  - name: 'JavaMonitor | Download latest version of JavaMonitor'
+    unarchive:
+      src: '{{ java_monitor_download_url }}'
+      dest: '{{ wo_basedir }}/tools'
+      remote_src: true
+      owner: '{{ wo_user }}'
+      group: '{{ wo_user_group }}'
+      mode: 0755
+
+  - name: 'JavaMonitor | Rename JavaMonitor bundle'
+    shell: mv JavaMonitor-*.woa JavaMonitor.woa
+    args:
+      chdir: '{{ wo_basedir }}/tools'
+  when: javamonitor_dir.stat.exists == False

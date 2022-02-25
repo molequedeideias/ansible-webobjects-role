@@ -10,6 +10,8 @@ wo_webdir: '/var/www/html/{{ wo_name }}'
 wo_unit_env: 'NEXT_ROOT={{ wo_basedir_prefix }}'
 wo_taskd_jvm_opts: '-Xmx512m'
 wo_taskd_port: '1085'
+wo_install_javamonitor: True
+wo_start_javamonitor: False
 wo_javamonitor_jvm_opts: '-Xmx512m'
 wo_javamonitor_port: '56789'
 wo_scripts_alias: '/cgi-bin/WebObjects'

@@ -12,7 +12,16 @@
   tags:
     - wo
     - deploy
+- import_tasks: wotaskd.yml
+  tags:
+    - wo
+    - deploy
     - wotaskd
+- import_tasks: javamonitor.yml
+  when: wo_install_javamonitor == True
+  tags:
+    - wo
+    - deploy
     - java_monitor
 - import_tasks: configure.yml
   tags:
