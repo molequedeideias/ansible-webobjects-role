@@ -17,16 +17,17 @@
     group: "{{ wo_user_group }}"
     mode: 0644
 
-- name: 'CONFIG | Create WebObjects SystemD unit'
+- name: 'CONFIG | Create WebObjects WOTaskD SystemD unit'
   template:
-    src: wo.service.j2
-    dest: "/etc/systemd/system/{{ wo_name }}.service"
+    src: wotaskd.service.j2
+    dest: "/etc/systemd/system/wotaskd.service"
     owner: root
     group: root
     mode: 0755
+  when: wo_install_wotaskd == True
   notify: start_wo_unit
 
-- name: 'CONFIG | Create JavaMonitor SystemD unit'
+- name: 'CONFIG | Create WebObjects JavaMonitor SystemD unit'
   template:
     src: javamonitor.service.j2
     dest: "/etc/systemd/system/javamonitor.service"

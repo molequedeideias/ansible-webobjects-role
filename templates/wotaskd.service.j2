@@ -1,5 +1,5 @@
 [Unit]
-Description = WebObjects service unit
+Description = WebObjects WOTaskD service unit
 After = network-online.target
 Wants = network-online.target
 
@@ -14,8 +14,8 @@ ExecStart = {{ wo_basedir }}/tools/wotaskd.woa/wotaskd {{ wo_taskd_jvm_opts }} \
                                                         -WODeploymentConfigurationDirectory {{ wo_basedir }}/config \
                                                         > {{ wo_logdir }}/wotaskd.log 2>&1 &
 ExecStop = kill `ps aux | awk '/wotaskd/ && !/awk/ {print $2}'`
-StandardOutput = {{ wo_logdir }}/{{ wo_name }}.log
-StandardError = {{ wo_logdir }}/{{ wo_name }}.err
+StandardOutput = append:{{ wo_logdir }}/wotaskd.log
+StandardError = append:{{ wo_logdir }}/wotaskd.log
 
 [Install]
 WantedBy = multi-user.target

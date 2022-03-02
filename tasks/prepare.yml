@@ -29,3 +29,9 @@
     createhome: yes
     home: '{{ wo_user_homedir }}'
 
+- name: 'Prepare| Enable the wotaskd log when starting apps'
+  file:
+    path: '/tmp/logWebObjects'
+    owner: 'root'
+    group: 'root'
+    state: touch

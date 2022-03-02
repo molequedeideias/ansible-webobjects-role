@@ -1,17 +1,22 @@
 ---
-wo_user: 'wo'
-wo_user_group: 'wo'
+wo_user: 'webobjects'
+wo_user_group: 'webobjects'
 wo_user_homedir: '/home/{{ wo_user }}'
-wo_name: 'wo'
+wo_name: 'webobjects'
 wo_basedir_prefix: '/opt'
 wo_basedir: '{{ wo_basedir_prefix }}/{{ wo_name }}'
 wo_logdir: '/var/log/{{ wo_name }}'
+wo_always_log: False
 wo_webdir: '/var/www/html/{{ wo_name }}'
 wo_unit_env: 'NEXT_ROOT={{ wo_basedir_prefix }}'
 wo_taskd_jvm_opts: '-Xmx512m'
 wo_taskd_port: '1085'
+wo_install_apache_adaptor: True
+wo_start_apache: True
+wo_install_wotaskd: True
+wo_start_wotaskd: True
 wo_install_javamonitor: True
-wo_start_javamonitor: False
+wo_start_javamonitor: True
 wo_javamonitor_jvm_opts: '-Xmx512m'
 wo_javamonitor_port: '56789'
 wo_scripts_alias: '/cgi-bin/WebObjects'
@@ -22,9 +27,11 @@ web_root: '/var/www/html'
 web_config_dir: '/etc/httpd/conf'
 web_custom_config_dir: '/etc/httpd/conf.d'
 
-wotaskd_download_url: >
+wonder_download_url: >-
+  https://github.com/wocommunity/wonder/archive/refs/tags/wonder-7.3.tar.gz
+wotaskd_download_url: >-
   https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=wotaskd&v=LATEST&p=woapplication.tar.gz
-java_monitor_download_url: >
+java_monitor_download_url: >-
   https://maven.wocommunity.org/service/local/artifact/maven/content?r=public&g=wonder.applications&a=JavaMonitor&v=LATEST&p=woapplication.tar.gz
 
 wo_apps: []

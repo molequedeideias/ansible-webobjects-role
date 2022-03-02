@@ -25,11 +25,3 @@
     path: '{{ wo_basedir }}/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh'
     regexp: '^LOG='
     line: LOG='{{ wo_logdir }}/SpawnOfWotaskd.log'
-
-- name: 'WOTASKD | Enable the wotaskd log when starting apps'
-  file:
-    path: '/tmp/logWebObjects'
-    owner: '{{ wo_user }}'
-    group: '{{ wo_user_group }}'
-    mode: 0644
-    state: touch

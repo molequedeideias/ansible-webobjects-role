@@ -14,8 +14,8 @@ ExecStart = {{ wo_basedir }}/tools/JavaMonitor.woa/JavaMonitor {{ wo_javamonitor
                                                         -WODeploymentConfigurationDirectory {{ wo_basedir }}/config \
                                                         > {{ wo_logdir }}/JavaMonitor.log 2>&1 &
 ExecStop = kill `ps aux | awk '/JavaMonitor/ && !/awk/ {print $2}'`
-StandardOutput = {{ wo_logdir }}/JavaMonitor.log
-StandardError = {{ wo_logdir }}/JavaMonitor.log
+StandardOutput = append:{{ wo_logdir }}/JavaMonitor.log
+StandardError = append:{{ wo_logdir }}/JavaMonitor.log
 
 [Install]
 WantedBy = multi-user.target

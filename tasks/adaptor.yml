@@ -7,12 +7,32 @@
   register: wo_adaptor_mod
 
 - block:
+  - name: 'ADAPTOR | Ensure wonder temporary dir exists'
+    file:
+      path: '/tmp/wonder'
+      state: directory
+
   - name: 'ADAPTOR | Clone wonder repository in a temporary folder'
-    git:
-      repo: 'https://github.com/wocommunity/wonder.git'
-      version: 'master'
+    unarchive:
+      src: '{{ wonder_download_url }}'
       dest: '/tmp/wonder'
-      force: yes
+      remote_src: True
+      extra_opts:
+        - '--strip-components=1'
+
+  - name: 'ADAPTOR | Configure WO Adaptor to always log'
+    lineinfile:
+      path: '/tmp/wonder/Utilities/Adaptors/Adaptor/config.h'
+      search_string: '/* #define ALWAYS_LOG */'
+      line: '#define ALWAYS_LOG'
+    when: wo_always_log == True
+
+  - name: 'ADAPTOR | Configure WO Adaptor to always log'
+    lineinfile:
+      path: '/tmp/wonder/Utilities/Adaptors/Adaptor/config.h'
+      search_string: '//#define ALWAYS_LOG */'
+      line: '#define ALWAYS_LOG'
+    when: wo_always_log == True
 
   - name: 'ADAPTOR | Configure Make to produce Linux compatible binaries of WO Adaptor'
     lineinfile:
@@ -48,10 +68,10 @@
     owner: 'root'
     group: 'root'
     mode: 0644
-  notify: restart_httpd
 
 - name: 'ADAPTOR | Remove ScriptAlias cgi-bin'
   lineinfile:
     path: '{{ web_config_dir }}/httpd.conf'
     regexp: '^ScriptAlias /cgi-bin/'
     state: absent
+  notify: restart_httpd

@@ -4,6 +4,7 @@
   become: yes
   become_user: root
 - import_tasks: adaptor.yml
+  when: wo_install_apache_adaptor == True
   tags:
     - wo
     - apache
@@ -13,6 +14,7 @@
     - wo
     - deploy
 - import_tasks: wotaskd.yml
+  when: wo_install_wotaskd == True
   tags:
     - wo
     - deploy
