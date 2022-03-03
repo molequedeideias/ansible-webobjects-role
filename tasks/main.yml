@@ -9,10 +9,6 @@
     - wo
     - apache
     - adaptor
-- import_tasks: deploy.yml
-  tags:
-    - wo
-    - deploy
 - import_tasks: wotaskd.yml
   when: wo_install_wotaskd == True
   tags:

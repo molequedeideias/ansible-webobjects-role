@@ -29,9 +29,46 @@
     createhome: yes
     home: '{{ wo_user_homedir }}'
 
-- name: 'Prepare| Enable the wotaskd log when starting apps'
+- name: 'PREPARE | Enable the wotaskd log when starting apps'
   file:
     path: '/tmp/logWebObjects'
     owner: 'root'
     group: 'root'
+    state: touch
+
+- name: 'DEPLOY | Create {{ wo_name }} related directories'
+  file:
+    path: '{{ item }}'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    state: directory
+    mode: 0755
+  with_items:
+    - '{{ wo_basedir }}/tools'
+    - '{{ wo_basedir }}/apps'
+    - '{{ wo_basedir }}/config'
+    - '{{ wo_logdir }}'
+    - '{{ wo_logdir }}/gc'
+    - '{{ wo_logdir }}/heapdumps'
+
+- name: 'DEPLOY | Create directory for {{ wo_name }} web resources'
+  file:
+    path: '{{ wo_webdir }}'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    state: directory
+    mode: 0755
+
+- name: 'PREPARE | Ensure WOTaskD log file is created'
+  file:
+    path: '{{ wo_logdir }}/wotaskd.log'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
+    state: touch
+
+- name: 'PREPARE | Ensure JavaMonitor log file is created'
+  file:
+    path: '{{ wo_logdir }}/JavaMonitor.log'
+    owner: '{{ wo_user }}'
+    group: '{{ wo_user_group }}'
     state: touch
