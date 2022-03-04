@@ -1,8 +1,16 @@
 ---
-- name: 'HANDLER | Restart httpd'
+- name: 'HANDLER | Stop httpd'
   service:
     name: httpd
-    state: restarted
+    state: stopped
+  listen:
+    - restart_httpd
+    - restart_apache
+
+- name: 'HANDLER | Start httpd'
+  service:
+    name: httpd
+    state: started
   listen:
     - restart_httpd
     - restart_apache
@@ -11,28 +19,51 @@
   systemd:
     daemon_reload: yes
   listen:
-    - start_wo_unit
-    - start_wo
-    - restart_wo
+    - start_wotaskd
+    - start_wotaskd_service
+    - restart_wotaskd
+    - restart_wotaskd_service
+
+- name: "HANDLER | Stop {{ wo_name }}'s WOTaskD"
+  service:
+    name: 'wotaskd'
+    state: stopped
+  listen:
+    - stop_wotaskd
+    - stop_wotaskd_service
+    - restart_wotaskd
+    - restart_wotaskd_service
 
 - name: "HANDLER | Restart {{ wo_name }}'s (and enable if needed) WOTaskD"
   service:
     name: 'wotaskd'
-    state: restarted
+    state: started
     enabled: yes
   when: wo_start_wotaskd == True
   listen:
-    - start_wo_unit
-    - start_wo
-    - restart_wo
+    - start_wotaskd
+    - start_wotaskd_service
+    - restart_wotaskd
+    - restart_wotaskd_service
 
-- name: "HANDLER | Start {{ wo_name }}'s (and enable if needed) JavaMonitor"
+- name: "HANDLER | Stop {{ wo_name }}'s JavaMonitor"
   service:
     name: 'javamonitor'
-    state: restarted
+    state: stopped
+  listen:
+    - stop_javamonitor
+    - stop_javamonitor_service
+    - restart_javamonitor
+    - restart_javamonitor_service
+
+- name: "HANDLER | Start {{ wo_name }}'s JavaMonitor (and enable if needed)"
+  service:
+    name: 'javamonitor'
+    state: started
     enabled: yes
   when: wo_start_javamonitor == True
   listen:
+    - start_javamonitor
     - start_javamonitor_service
-    - javamonitor_service
     - restart_javamonitor
+    - restart_javamonitor_service
