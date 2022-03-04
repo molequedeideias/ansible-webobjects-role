@@ -65,6 +65,7 @@
     owner: '{{ wo_user }}'
     group: '{{ wo_user_group }}'
     state: touch
+  when: wo_install_wotaskd == True
 
 - name: 'PREPARE | Ensure JavaMonitor log file is created'
   file:
@@ -72,3 +73,4 @@
     owner: '{{ wo_user }}'
     group: '{{ wo_user_group }}'
     state: touch
+  when: wo_install_javamonitor == True
