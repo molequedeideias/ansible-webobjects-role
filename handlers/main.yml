@@ -34,7 +34,7 @@
     - restart_wotaskd
     - restart_wotaskd_service
 
-- name: "HANDLER | Restart {{ wo_name }}'s (and enable if needed) WOTaskD"
+- name: "HANDLER | Start {{ wo_name }}'s (and enable if needed) WOTaskD"
   service:
     name: 'wotaskd'
     state: started
