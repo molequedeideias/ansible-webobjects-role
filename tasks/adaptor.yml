@@ -20,16 +20,16 @@
       extra_opts:
         - '--strip-components=1'
 
-  - name: 'ADAPTOR | Configure WO Adaptor to always log'
+  - name: 'ADAPTOR | Configure WO Adaptor to always log in /tmp/wonder/Utilities/Adaptors/Adaptor/config.h'
     lineinfile:
       path: '/tmp/wonder/Utilities/Adaptors/Adaptor/config.h'
       search_string: '/* #define ALWAYS_LOG */'
       line: '#define ALWAYS_LOG'
     when: wo_always_log == True
 
-  - name: 'ADAPTOR | Configure WO Adaptor to always log'
+  - name: 'ADAPTOR | Configure WO Adaptor to always log /tmp/wonder/Utilities/Adaptors/Adaptor/log.c'
     lineinfile:
-      path: '/tmp/wonder/Utilities/Adaptors/Adaptor/config.h'
+      path: '/tmp/wonder/Utilities/Adaptors/Adaptor/log.c'
       search_string: '//#define ALWAYS_LOG */'
       line: '#define ALWAYS_LOG'
     when: wo_always_log == True
