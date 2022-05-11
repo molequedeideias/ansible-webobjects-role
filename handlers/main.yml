@@ -11,6 +11,7 @@
   service:
     name: httpd
     state: started
+    enabled: yes
   listen:
     - restart_httpd
     - restart_apache
