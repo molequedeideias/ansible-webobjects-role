@@ -25,3 +25,19 @@
     path: '{{ wo_basedir }}/tools/wotaskd.woa/Contents/Resources/SpawnOfWotaskd.sh'
     regexp: '^LOG='
     line: LOG='{{ wo_logdir }}/SpawnOfWotaskd.log'
+
+- name: 'WOTASKD | Fetch Java version'
+  shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
+  register: java_version
+
+- name: 'WOTASKD | Configure the wotaskd to run with Java >= 9'
+  lineinfile:
+    path: '{{ wo_basedir }}/tools/wotaskd.woa/Contents/{{ item }}'
+    regexp: '^# JVMOptions'
+    line: '# JVMOptions       == --add-exports java.base/sun.security.action=ALL-UNNAMED'
+  with_items:
+    - 'UNIX/UNIXClassPath.txt'
+    - 'MacOS/MacOSClassPath.txt'
+    - 'MacOS/MacOSXServerClassPath.txt'
+    - 'Windows/CLSSPATH.TXT'
+  when: java_version.stdout is version_compare('9', '>=')
