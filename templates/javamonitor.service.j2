@@ -8,7 +8,7 @@ User = {{ wo_user }}
 Type = oneshot
 RemainAfterExit = yes
 Environment = {{ wo_unit_env }}
-WorkingDirectory = {{ wo_basedir }}
+# WorkingDirectory = {{ wo_basedir }}
 ExecStart = {{ wo_basedir }}/tools/JavaMonitor.woa/JavaMonitor {{ wo_javamonitor_jvm_opts }} \
                                                         -WOPort {{ wo_javamonitor_port }} \
                                                         -WODeploymentConfigurationDirectory {{ wo_basedir }}/config \

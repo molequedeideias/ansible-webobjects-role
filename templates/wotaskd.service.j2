@@ -8,7 +8,7 @@ User = {{ wo_user }}
 Type = oneshot
 RemainAfterExit = yes
 Environment = {{ wo_unit_env }}
-WorkingDirectory = {{ wo_basedir }}
+# WorkingDirectory = {{ wo_basedir }}
 ExecStart = {{ wo_basedir }}/tools/wotaskd.woa/wotaskd {{ wo_taskd_jvm_opts }} \
                                                         -WOPort {{ wo_taskd_port }} \
                                                         -WODeploymentConfigurationDirectory {{ wo_basedir }}/config \
