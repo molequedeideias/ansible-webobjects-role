@@ -6,6 +6,9 @@
     name:
       - '{{ java_version }}'
     state: present
+  tags:
+    - base_config
+    - never
 
 - name: 'PREPARE | Install required dependency to make WO Apache Adaptor (Make, GCC, httpd, httpd-devel)'
   yum:
@@ -18,6 +21,9 @@
       - 'redhat-rpm-config'
     state: present
   when: wo_install_apache_adaptor == True
+  tags:
+    - base_config
+    - never
 
 - name: 'PREPARE | Create {{ wo_user_group }} group in the system'
   group:
