@@ -18,7 +18,6 @@
 			<unixPath type="NSString">{{ wo_app.unix_path }}</unixPath>
 			<adaptorThreadsMin type="NSNumber">{{ wo_app.adaptor_threads_min }}</adaptorThreadsMin>
 			<notificationEmailEnabled type="NSString">{{ wo_app.notification_email_enabled }}</notificationEmailEnabled>
-			<macPath type="NSString">{{ wo_app.mac_path }}</macPath>
 			<lifebeatInterval type="NSNumber">{{ wo_app.lifebeat_interval }}</lifebeatInterval>
 			<minimumActiveSessionsCount type="NSNumber">{{ wo_app.minimum_active_session_count }}</minimumActiveSessionsCount>
 			<adaptorThreadsMax type="NSNumber">{{ wo_app.adaptor_threads_max }}</adaptorThreadsMax>
@@ -32,7 +31,6 @@
 			<sessionTimeOut type="NSNumber">{{ wo_app.session_timeout }}</sessionTimeOut>
 			<debuggingEnabled type="NSString">{{ wo_app.debugging_enabled }}</debuggingEnabled>
 			<phasedStartup type="NSString">{{ wo_app.phased_startup }}</phasedStartup>
-			<macOutputPath type="NSString">{{ wo_app.mac_output_path }}</macOutputPath>
 			<timeForStartup type="NSNumber">{{ wo_app.time_for_startup }}</timeForStartup>
 		</element>
 {% endfor %}
@@ -73,7 +71,9 @@
 {% endfor %}
 	</instanceArray>
 	<site type="NSDictionary">
+	    <password type="NSString">{{ wo_site_password }}</password>
 		<viewRefreshEnabled type="NSString">{{ wo_site_view_refresh_enabled }}</viewRefreshEnabled>
+		<woAdaptor type="NSString">{{ wo_site_woadaptor }}</woAdaptor>
 		<viewRefreshRate type="NSNumber">{{ wo_site_view_refresh_rate }}</viewRefreshRate>
 	</site>
 </SiteConfig>
