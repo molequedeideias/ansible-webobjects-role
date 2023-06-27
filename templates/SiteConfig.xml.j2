@@ -73,7 +73,9 @@
 	<site type="NSDictionary">
 	    <password type="NSString">{{ wo_site_password }}</password>
 		<viewRefreshEnabled type="NSString">{{ wo_site_view_refresh_enabled }}</viewRefreshEnabled>
-		<woAdaptor type="NSString">{{ wo_site_woadaptor }}</woAdaptor>
 		<viewRefreshRate type="NSNumber">{{ wo_site_view_refresh_rate }}</viewRefreshRate>
+		{% if wo_site_woadaptor_url_enabled -%}
+   		    <woAdaptor type="NSString">{{ wo_site_woadaptor_url }}</woAdaptor>
+   		{%- endif %}
 	</site>
 </SiteConfig>
