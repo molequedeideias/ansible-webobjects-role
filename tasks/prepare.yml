@@ -10,6 +10,14 @@
     - base_config
     - never
 
+- name: 'PREPARE | Configure default alternative for Java 17'
+  alternatives:
+    name: java
+    path: '{{ java_path }}'
+  tags:
+    - base_config
+    - never
+
 - name: 'PREPARE | Install required dependency to make WO Apache Adaptor (Make, GCC, httpd, httpd-devel)'
   yum:
     name:
