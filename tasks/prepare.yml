@@ -20,6 +20,7 @@
       tags:
         - base_config
         - never
+      when: "'wo_app' in group_names"
 
     - name: 'JAVA | Install required dependency {{ java_version }}'
       yum:
@@ -30,16 +31,28 @@
         - base_config
         - never
 
-    - name: 'JAVA | Configure default alternative for Java'
+    - name: 'JAVA | Configure default alternative for Java on apps'
       alternatives:
         name: 'java'
         path: '{{ java_path }}'
       notify:
         - start_wotaskd
-        - restart_javamonitor_service
+      when: "'wo_app' in group_names"
       tags:
         - base_config
         - never
+
+    - name: 'JAVA | Configure default alternative for Java on apaches'
+      alternatives:
+        name: 'java'
+        path: '{{ java_path }}'
+      notify:
+        - restart_javamonitor
+      when: "'wo_apache' in group_names"
+      tags:
+        - base_config
+        - never
+
   when: java_install_check.changed
   tags:
     - base_config
