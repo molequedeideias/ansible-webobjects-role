@@ -1,19 +1,59 @@
 # prepare file for ansible-webojects-role
 # Here should go tasks that will prepare the system, environment, etc, before the installation continues
 ---
-- name: 'PREPARE | Install required dependency {{ java_version }}'
+- name: 'JAVA | Checking if Java {{ java_version }} is installed'
   yum:
-    name:
-      - '{{ java_version }}'
+    name: '{{ java_version }}'
     state: present
+  register: java_install_check
+  check_mode: true
   tags:
     - base_config
     - never
 
-- name: 'PREPARE | Configure default alternative for Java 17'
-  alternatives:
-    name: java
-    path: '{{ java_path }}'
+- name: 'JAVA | Install and configure java version: {{ java_version }}'
+  block:
+    - name: 'JAVA | Stop wotaskd service'
+      service:
+        name: 'wotaskd'
+        state: stopped
+      tags:
+        - base_config
+        - never
+      when: "'wo_app' in group_names"
+
+    - name: 'JAVA | Install required dependency {{ java_version }}'
+      yum:
+        name:
+          - '{{ java_version }}'
+        state: present
+      tags:
+        - base_config
+        - never
+
+    - name: 'JAVA | Configure default alternative for Java on apps'
+      alternatives:
+        name: 'java'
+        path: '{{ java_path }}'
+      notify:
+        - start_wotaskd
+      when: "'wo_app' in group_names"
+      tags:
+        - base_config
+        - never
+
+    - name: 'JAVA | Configure default alternative for Java on apaches'
+      alternatives:
+        name: 'java'
+        path: '{{ java_path }}'
+      notify:
+        - restart_javamonitor
+      when: "'wo_apache' in group_names"
+      tags:
+        - base_config
+        - never
+
+  when: java_install_check.changed
   tags:
     - base_config
     - never
