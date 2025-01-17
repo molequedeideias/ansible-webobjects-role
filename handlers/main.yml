@@ -51,6 +51,7 @@
   service:
     name: 'javamonitor'
     state: stopped
+  when: "'wo_apache' in group_names"
   listen:
     - stop_javamonitor
     - stop_javamonitor_service
