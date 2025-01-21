@@ -8,6 +8,9 @@
     owner: "{{ wo_user }}"
     group: "{{ wo_user_group }}"
     mode: 0644
+  notify:
+    - restart_javamonitor_service
+    - restart_wotaskd_service
 
 - name: 'CONFIG | Configure WebObjects apps on WOConfig.xml'
   template:
